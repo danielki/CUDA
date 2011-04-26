@@ -1,0 +1,23 @@
+#include <stdio.h>
+
+	__global__ void emptyKernel()
+	{
+	// leerer Kernel
+	}
+
+int main(int argc, char ** argv)
+{
+    dim3 dimGrid(300000000);
+    dim3 dimBlock(1);
+    emptyKernel<<<dimGrid, dimBlock>>>();
+	return 0;
+}
+
+Dieser Aufruf schlägt fehl, da eine zu große Griddimension gewählt wurde.
+
+Drei weitere Fehler beim Aufruf sind:
+
+- zu viel Speicher reserviert, sowohl geteilter als auch privater Speicher
+- aufrufen von Funktionen, die nicht bereit gestellt werden in bestimmten Versionen ( printf()
+- die Anzahl an Befehlen in einem Thread wurde überschritten
+- ...
