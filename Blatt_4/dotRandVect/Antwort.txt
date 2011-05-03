@@ -1,0 +1,22 @@
+dotRandVect liefert folgendes Ergebnis für die verschiedenen Testfälle:
+
+Blöcke: 32768, Threads: 32, Timing:0.712608
+
+Blöcke: 16384, Threads: 64, Timing:0.601888
+
+Blöcke: 8192, Threads: 128, Timing:0.620160
+
+Blöcke: 4096, Threads: 256, Timing:0.664736
+
+Blöcke: 2048, Threads: 512, Timing:0.659680
+
+Blöcke: 1024, Threads: 1024, Timing:0.643808
+
+Die Zeiten sind in etwa gleich und somit ergeben sich keine signifikanten Leistungsunterschiede. 
+Vermutlich ergeben sich diese Unterschiede, wenn man noch die 2. Dimension nutzt und somit mehr. bzw.
+weniger Threads pro Block starten kann.
+
+
+
+
+
