@@ -1,13 +1,13 @@
 struct listElement
-	{
-	int value;
-	struct listElement *next;
-	};
+    {
+    int value;
+    struct listElement *next;
+    };
 
 struct list
-	{
-	struct listElement *firstElement;
-	};
+    {
+    struct listElement *firstElement;
+    };
 list* createList();
 void addBegin(list* l, int value);
 listElement* goToEnd(list* l);

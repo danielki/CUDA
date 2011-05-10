@@ -19,8 +19,6 @@ primitives:
   color: *red
 - triangle: [[5, 5, 1], [10, 10, 1], [10, 5, 1]]
   color: *green
-- triangle: [[0, 10, 1], [0, 1, 1], [9, 10, 1]]
-  color: *blue
 
 # camera
 camera:

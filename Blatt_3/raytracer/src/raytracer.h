@@ -17,5 +17,5 @@ bool intersect(const ray& r, const triangle& t, point& intersection);
 // initial rays
 void initial_ray(const camera& c, int x, int y, ray& r);
 
-void render_image(const scene& s, const int& height, const int& width, rgb* image);
+void render_image(scene& s, const int& height, const int& width, rgb* image);
 

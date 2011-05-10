@@ -56,7 +56,8 @@ void parse_scene(const char* filename, scene& s)
 
 void find_primitives(const YAML::Node& doc, primitives& p)
     {
-    if (const YAML::Node& prims = doc["primitives"])
+    const YAML::Node& prims = doc["primitives"];
+    if ( prims != NULL )
         {
         for(unsigned i=0; i<prims.size(); i++)
             {

@@ -8,11 +8,11 @@ using namespace std;
 
 int RandomNumber(int max)
     {
-	return (rand() % (max + 1 ));
+    return (rand() % (max + 1 ));
     }
 
 int main(int argc, char ** argv)
-{
+    {
     srand((unsigned) time(NULL));
     list *l = createList();
     addEnd(l,1);
@@ -23,9 +23,9 @@ int main(int argc, char ** argv)
         parem = atoi(argv[1]);
         }
     for ( int x=1; x<=parem; x++ )
-    {
-    addEnd(l,RandomNumber(9999));
-    }
+        {
+        addEnd(l,RandomNumber(9999));
+        }
     print(l);
     addBegin(l,4);
     addEnd(l,2);
@@ -46,5 +46,5 @@ int main(int argc, char ** argv)
     print(l);
     reverseOrder(l);
     print(l);
-	return 0;
-}
+    return 0;
+    }

@@ -4,46 +4,56 @@
 #include <iostream>
 
 // define structs
-struct point {
+struct point
+    {
     float x;
     float y;
     float z;
-};
+    };
 
-struct rgb {
+struct rgb
+    {
     int r;
     int g;
     int b;
-};
+    };
 
-struct triangle {
+struct triangle
+    {
     point A;
     point B;
     point C;
-	rgb farbe;
-};
+    rgb farbe;
+    };
 
-struct primitives {
-    std::vector <triangle> t; 
-};
+struct primitives
+    {
+    std::vector <triangle> t;
+    };
 
-struct camera {
+struct camera
+    {
     point position;
     point richtung;
-	point oben;
-	point obenLinks;
-};
+    point oben;
+    point obenLinks;
+    float entfernung;
+    float horizontalerWinkel;
+    float vertikalerWinkel;
+    };
 
-struct ray {
+struct ray
+    {
     point start;
     point richtung;
-};
+    };
 
-struct scene {
+struct scene
+    {
     rgb hintergrund;
     camera cam;
     primitives objekte;
-};
+    };
 
 // define types
 typedef struct point point;

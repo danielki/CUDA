@@ -137,7 +137,7 @@ struct  deviceData
 #if __CUDA__
  __host__ triangle* copyPrimitivesToDevice(const triangle* t, int n)
     {
-    size_t sizeInBytes = n*sizeof(t);
+    size_t sizeInBytes = n*sizeof(triangle);
     triangle* devicePointer;
     cudaError_t error = cudaMalloc(&devicePointer, sizeInBytes);
     CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
@@ -150,7 +150,7 @@ struct  deviceData
 #if __CUDA__
  __host__ deviceData* copyDataToDevice(const deviceData &devDat)
     {
-    size_t sizeInBytes = sizeof(devDat);
+    size_t sizeInBytes = sizeof(deviceData);
     deviceData* devicePointer;
     cudaError_t error = cudaMalloc(&devicePointer, sizeInBytes);
     CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
@@ -163,7 +163,7 @@ struct  deviceData
 #if __CUDA__
  __host__ rgb* copyImageToDevice(const rgb* image,int n)
     {
-	size_t sizeInBytes = n*sizeof(image);
+	size_t sizeInBytes = n*sizeof(rgb);
     rgb* devicePointer;
     cudaError_t error = cudaMalloc(&devicePointer, sizeInBytes);
     CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
@@ -176,7 +176,7 @@ struct  deviceData
 #if __CUDA__
  __host__ void copyImageToHost(rgb* image, rgb* imageDevPointer,int n)
     {
-	size_t sizeInBytes = n*sizeof(image);
+	size_t sizeInBytes = n*sizeof(rgb);
 	cudaError_t error = cudaMemcpy(image, imageDevPointer, sizeInBytes, cudaMemcpyDeviceToHost);
 	CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
 	}
@@ -277,9 +277,9 @@ __global__ void renderImage(triangle* prims, deviceData* devDat, rgb* image)
 	erzeugeBildebene(s, stdRechts, stdRunter, height, width);
 	
 	#if __CUDA__
-	// Daten die auf dem Device gebraucht werden erzeugen
 	cudaGetLastError();
 	
+	// Daten die auf dem Device gebraucht werden erzeugen
 	deviceData devDat;
 	devDat.stdRechts = stdRechts;
 	devDat.stdRunter = stdRunter;
@@ -288,12 +288,12 @@ __global__ void renderImage(triangle* prims, deviceData* devDat, rgb* image)
 	devDat.height = height;
 	devDat.width = width;
 	devDat.primSize = s.objekte.t.size();
+	
 	triangle* t = erzeugePrimitiveArray(s.objekte);
 	triangle* primsDevPointer = copyPrimitivesToDevice(t,s.objekte.t.size());
 	
 	
-	
-		//
+	//
 			rgb z;
 		z.r = 0;
 		z.g = 0;
@@ -314,8 +314,8 @@ __global__ void renderImage(triangle* prims, deviceData* devDat, rgb* image)
 	
 	
 	
-	int x = ((height-1)/32) + 1;
-	int y = ((width-1)/32) + 1;
+	int x = ((height+31)/32);
+	int y = ((width+31)/32);
 	dim3 dimBlock(32,32);
 	dim3 dimGrid(x,y);	
 	
