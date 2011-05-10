@@ -161,20 +161,18 @@ struct  deviceData
 #endif	
 
 #if __CUDA__
- __host__ rgb* copyImageToDevice(const rgb* image,int n)
+ __host__ rgb* copyImageToDevice(const rgb* image, int n)
     {
 	size_t sizeInBytes = n*sizeof(rgb);
     rgb* devicePointer;
     cudaError_t error = cudaMalloc(&devicePointer, sizeInBytes);
-    CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
-    error = cudaMemcpy(devicePointer, &image, sizeInBytes, cudaMemcpyHostToDevice);
     CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
 	return devicePointer;
 	}
 #endif
 
 #if __CUDA__
- __host__ void copyImageToHost(rgb* image, rgb* imageDevPointer,int n)
+ __host__ void copyImageToHost(rgb* image, rgb* imageDevPointer, int n)
     {
 	size_t sizeInBytes = n*sizeof(rgb);
 	cudaError_t error = cudaMemcpy(image, imageDevPointer, sizeInBytes, cudaMemcpyDeviceToHost);
@@ -223,37 +221,27 @@ struct  deviceData
 __global__ void renderImage(triangle* prims, deviceData* devDat, rgb* image) 
 	{
 	int h = threadIdx.x + blockIdx.x * blockDim.x;
-	int w = threadIdx.y + blockIdx.y * blockDim.y;
-		
-		//
-		rgb z;
-		z.r = 0;
-		z.g = 0;
-		z.b = 0;
-        //
-        
-	
-	if ( h < devDat[0].height && w < devDat[0].width )
+	int w = threadIdx.y + blockIdx.y * blockDim.y;  
+	if ( h < devDat->height && w < devDat->width )
 		{
-		image[h*devDat[0].width+w]=z;
-		//image[h*devDat[0].width+w]=devDat[0].hintergrund;
-		/*ray r;
-		initial_ray(devDat[0].cam,w,h,r,devDat[0].stdRechts,devDat[0].stdRunter);
-		point p;
-		float entfernung = FLT_MAX;
-		for (int o=0; o < devDat[0].primSize; o++ )
-			{
-			if ( intersect(r,prims[o],p) )
-				{
-				p = p - r.start;
-				if (norm(p) < entfernung) // näher dran als vorhergehendes objekt ?
-					{
-					entfernung = norm(p);
-					image[h*devDat[0].width+w]=shade(r,prims[o]);
-					}
-				}
-			}*/
-		}
+		image[h*devDat->width+w]=devDat->hintergrund;
+        ray r;
+        initial_ray(devDat->cam,w,h,r,devDat->stdRechts,devDat->stdRunter);
+        point p;
+        float entfernung = FLT_MAX;
+        for (unsigned int o=0; o < devDat->primSize; o++ )
+            {
+            /*if ( intersect(r,prims[o],p) )
+                {
+                p = p - r.start;
+                if (norm(p) < entfernung) // näher dran als vorhergehendes objekt ?
+                    {
+                    entfernung = norm(p);
+                    image[h*devDat->width+w]=shade(r,prims[o]);
+                    }
+                }*/
+            }
+        }
 	}
 #endif
 
@@ -291,34 +279,14 @@ __global__ void renderImage(triangle* prims, deviceData* devDat, rgb* image)
 	
 	triangle* t = erzeugePrimitiveArray(s.objekte);
 	triangle* primsDevPointer = copyPrimitivesToDevice(t,s.objekte.t.size());
-	
-	
-	//
-			rgb z;
-		z.r = 0;
-		z.g = 0;
-		z.b = 255;
-	for (int h=0; h < height; h++)
-        {
-        for (int w=0; w < width; w++)
-            {
-            image[h*width+w]=z;
-            }
-        }
-	//
-	
-	
-	
+
 	deviceData* devDatPointer = copyDataToDevice(devDat);
 	rgb* imageDevPointer = copyImageToDevice(image,width*height);
-	
-	
 	
 	int x = ((height+31)/32);
 	int y = ((width+31)/32);
 	dim3 dimBlock(32,32);
 	dim3 dimGrid(x,y);	
-	
 	renderImage<<<dimGrid, dimBlock>>>(primsDevPointer, devDatPointer, imageDevPointer);	
 	cudaThreadSynchronize();
 	copyImageToHost(image, imageDevPointer, width*height);

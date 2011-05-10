@@ -28,7 +28,7 @@ target_link_libraries(rt ${GFLAGS_LIBRARY})
 target_link_libraries(rt ${YAMLCPP_LIBRARY})
 
 CONFIGURE_FILE(src/raytracer.cc src/raytracer.cu COPYONLY)
-cuda_add_executable(rtcuda src/main.cc src/parser.cc src/raytracer.cu src/ppm_writer.cc src/types.cc src/device.cu OPTIONS "-D__CUDA__")
+cuda_add_executable(rtcuda src/main.cc src/parser.cc src/raytracer.cu src/ppm_writer.cc src/types.cc OPTIONS "-D__CUDA__")
 set_target_properties(rtcuda PROPERTIES COMPILE_FLAGS "-D__CUDA__")
 target_link_libraries(rtcuda ${GLOG_LIBRARY})
 target_link_libraries(rtcuda ${GFLAGS_LIBRARY})

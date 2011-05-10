@@ -27,6 +27,11 @@ struct primitives
     std::vector <triangle> t;
     };
 
+struct lights
+    {
+    std::vector <point> l;
+    };
+
 struct camera
     {
     point position;
@@ -48,6 +53,7 @@ struct scene
     {
     rgb hintergrund;
     camera cam;
+    lights lichter;
     primitives objekte;
     };
 

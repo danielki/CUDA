@@ -12,5 +12,6 @@ void operator >>(const YAML::Node& node, ray& r);
 
 void parse_scene(const char* filename, scene& s);
 void find_primitives(const YAML::Node& doc, primitives& p);
+void find_lights(const YAML::Node& doc, lights& l);
 void find_camera(const YAML::Node& doc, camera& c);
 void find_background(const YAML::Node& doc, rgb& b);

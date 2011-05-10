@@ -8,9 +8,6 @@
 #include "parser.h"
 #include "raytracer.h"
 #include "ppm_writer.h"
-#if __CUDA__
-#include "device.h"
-#endif
 
 static bool validateWidthAndHeight(const char* flagname, int value)
     {
