@@ -43,9 +43,36 @@ void operator >>(const YAML::Node& node, camera& c)
     node["location"] >> c.position;
     node["direction"] >> c.richtung;
     node["up"] >> c.oben;
-    node["distance"] >> c.entfernung;
-    node["horizontal_angle"] >> c.horizontalerWinkel;
-    node["vertical_angle"] >> c.vertikalerWinkel;
+    const YAML::Node *distance = node.FindValue("distance");
+    if ( distance != NULL )
+        {
+        (*distance) >> c.entfernung;
+        }
+    else
+        {    
+        LOG(INFO) << "Kein Distance definiert, Standartwert 1 definiert.";
+        c.entfernung = 1.0;
+        }
+    const YAML::Node *horizontal_angle = node.FindValue("horizontal_angle");
+    if ( distance != NULL )
+        {
+        (*horizontal_angle) >> c.horizontalerWinkel;
+        }
+    else
+        {   
+        c.horizontalerWinkel = 140.0; 
+        LOG(INFO) << "Kein horizontaler Winkel definiert, Standartwert 140 festgelegt.";
+        }
+    const YAML::Node *vertical_angle = node.FindValue("vertical_angle");
+    if ( distance != NULL )
+        {
+        (*vertical_angle) >> c.vertikalerWinkel;
+        }
+    else
+        {    
+        c.vertikalerWinkel = 140.0;
+        LOG(INFO) << "Kein vertikaler Winkel definiert, Standartwert 140 festgelegt.";
+        }
     }
 
 void parse_scene(const char* filename, scene& s)
@@ -70,6 +97,10 @@ void find_primitives(const YAML::Node& doc, primitives& p)
             (*prims)[i] >> p;
             }
         }
+    else
+        {    
+        LOG(INFO) << "Keine Objekte definiert.";
+        }
     }
 
 void find_lights(const YAML::Node& doc, lights& l)
@@ -82,6 +113,10 @@ void find_lights(const YAML::Node& doc, lights& l)
             (*lights)[i] >> l;
             }
         }
+    else
+        {    
+        LOG(INFO) << "Keine Lichter definiert.";
+        }
     }
 
 void find_camera(const YAML::Node& doc, camera& c)
@@ -91,6 +126,10 @@ void find_camera(const YAML::Node& doc, camera& c)
         {
         (*cam) >> c;
         }
+    else
+        {    
+        LOG(INFO) << "Keine Kamera definiert.";
+        }
     }
 
 void find_background(const YAML::Node& doc, rgb& b)
@@ -99,5 +138,9 @@ void find_background(const YAML::Node& doc, rgb& b)
     if ( background != NULL )
         {
         (*background) >> b;
+        }
+    else
+        {    
+        LOG(INFO) << "Kein Hintergrund definiert.";
         }
     }

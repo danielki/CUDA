@@ -17,7 +17,6 @@ struct  deviceData
     };
 
 
-//WE ASSUME LEFT-HANDED ORIENTATION (left hand rule)...
  __device__ __host__ point cross(const point &p1, const point &p2)
     {
     point point;
@@ -135,46 +134,9 @@ struct  deviceData
     }
 	
 #if __CUDA__
- __host__ triangle* copyPrimitivesToDevice(const triangle* t, int n)
-    {
-    size_t sizeInBytes = n*sizeof(triangle);
-    triangle* devicePointer;
-    cudaError_t error = cudaMalloc(&devicePointer, sizeInBytes);
-    CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
-    error = cudaMemcpy(devicePointer, &t, sizeInBytes, cudaMemcpyHostToDevice);
-    CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
-	return devicePointer;
-    }
-#endif
-
-#if __CUDA__
- __host__ deviceData* copyDataToDevice(const deviceData &devDat)
-    {
-    size_t sizeInBytes = sizeof(deviceData);
-    deviceData* devicePointer;
-    cudaError_t error = cudaMalloc(&devicePointer, sizeInBytes);
-    CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
-    error = cudaMemcpy(devicePointer, &devDat, sizeInBytes, cudaMemcpyHostToDevice);
-    CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
-	return devicePointer;
-    }
-#endif	
-
-#if __CUDA__
- __host__ rgb* copyImageToDevice(const rgb* image, int n)
-    {
-	size_t sizeInBytes = n*sizeof(rgb);
-    rgb* devicePointer;
-    cudaError_t error = cudaMalloc(&devicePointer, sizeInBytes);
-    CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
-	return devicePointer;
-	}
-#endif
-
-#if __CUDA__
  __host__ void copyImageToHost(rgb* image, rgb* imageDevPointer, int n)
     {
-	size_t sizeInBytes = n*sizeof(rgb);
+	int sizeInBytes = n*sizeof(rgb);
 	cudaError_t error = cudaMemcpy(image, imageDevPointer, sizeInBytes, cudaMemcpyDeviceToHost);
 	CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
 	}
@@ -189,6 +151,7 @@ struct  deviceData
 	CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
 	error = cudaFree(imageDevPointer);
 	CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
+    LOG(INFO) << "Speicher auf dem Device freigegeben.";
 	}
 #endif	
 
@@ -220,26 +183,27 @@ struct  deviceData
 #if __CUDA__
 __global__ void renderImage(triangle* prims, deviceData* devDat, rgb* image) 
 	{
-	int h = threadIdx.x + blockIdx.x * blockDim.x;
-	int w = threadIdx.y + blockIdx.y * blockDim.y;  
-	if ( h < devDat->height && w < devDat->width )
+	int x = threadIdx.x + blockIdx.x * blockDim.x;
+	int y = threadIdx.y + blockIdx.y * blockDim.y;  
+	if ( y < devDat->height && x < devDat->width )
 		{
-		image[h*devDat->width+w]=devDat->hintergrund;
+		image[y*devDat->width+x]=devDat->hintergrund;
         ray r;
-        initial_ray(devDat->cam,w,h,r,devDat->stdRechts,devDat->stdRunter);
+        initial_ray(devDat->cam,x,y,r,devDat[0].stdRechts,devDat->stdRunter);
+           
         point p;
         float entfernung = FLT_MAX;
         for (unsigned int o=0; o < devDat->primSize; o++ )
             {
-            /*if ( intersect(r,prims[o],p) )
+            if ( intersect(r,prims[o],p) )
                 {
-                p = p - r.start;
+                p =  r.start;
                 if (norm(p) < entfernung) // näher dran als vorhergehendes objekt ?
                     {
                     entfernung = norm(p);
-                    image[h*devDat->width+w]=shade(r,prims[o]);
+                    image[y*devDat->width+x]=shade(r,prims[o]);
                     }
-                }*/
+                }
             }
         }
 	}
@@ -260,13 +224,14 @@ __global__ void renderImage(triangle* prims, deviceData* devDat, rgb* image)
 
  __host__ void render_image(scene &s, const int &height, const int &width, rgb* image)
     {
+    
 	point stdRechts;
     point stdRunter;
 	erzeugeBildebene(s, stdRechts, stdRunter, height, width);
 	
 	#if __CUDA__
 	cudaGetLastError();
-	
+	cudaError_t error;
 	// Daten die auf dem Device gebraucht werden erzeugen
 	deviceData devDat;
 	devDat.stdRechts = stdRechts;
@@ -276,21 +241,49 @@ __global__ void renderImage(triangle* prims, deviceData* devDat, rgb* image)
 	devDat.height = height;
 	devDat.width = width;
 	devDat.primSize = s.objekte.t.size();
-	
 	triangle* t = erzeugePrimitiveArray(s.objekte);
-	triangle* primsDevPointer = copyPrimitivesToDevice(t,s.objekte.t.size());
+	
 
-	deviceData* devDatPointer = copyDataToDevice(devDat);
-	rgb* imageDevPointer = copyImageToDevice(image,width*height);
-	
-	int x = ((height+31)/32);
-	int y = ((width+31)/32);
-	dim3 dimBlock(32,32);
+    int sizeInBytes = s.objekte.t.size()*sizeof(triangle);
+    triangle* primsDevPointer;
+    error = cudaMalloc(&primsDevPointer, sizeInBytes);
+    CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
+    error = cudaMemcpy(primsDevPointer, t, sizeInBytes, cudaMemcpyHostToDevice);
+    CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
+    CHECK_NOTNULL(primsDevPointer);
+
+
+    sizeInBytes = sizeof(deviceData);
+    deviceData* devDatPointer;
+    error = cudaMalloc(&devDatPointer, sizeInBytes);
+    CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
+    error = cudaMemcpy(devDatPointer, &devDat, sizeInBytes, cudaMemcpyHostToDevice);
+    CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
+	CHECK_NOTNULL(devDatPointer);
+
+
+	sizeInBytes = height*width*sizeof(rgb);
+    rgb* imageDevPointer;
+    error = cudaMalloc(&imageDevPointer, sizeInBytes);
+    CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
+	CHECK_NOTNULL(imageDevPointer);
+	LOG(INFO) << "Speicher auf dem Device angefordert.";
+	int n=8;
+	int x = ((height+n-1)/n);
+	int y = ((width+n-1)/n);
+	dim3 dimBlock(n,n);
 	dim3 dimGrid(x,y);	
+
+	LOG(INFO) << "Kernel gestartet.";
 	renderImage<<<dimGrid, dimBlock>>>(primsDevPointer, devDatPointer, imageDevPointer);	
-	cudaThreadSynchronize();
-	copyImageToHost(image, imageDevPointer, width*height);
+	error = cudaGetLastError();
+	CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
+	error = cudaThreadSynchronize();
+	CHECK_EQ(cudaSuccess, error) << "Error: " << cudaGetErrorString(error);
 	
+	copyImageToHost(image, imageDevPointer, width*height);
+	LOG(INFO) << "Alle Threads abgearbeitet und Daten yur[ck kopiert.";
+
 	// Speicher freigeben	
 	freeDeviceData(primsDevPointer, devDatPointer, imageDevPointer);
 	#endif
@@ -319,6 +312,7 @@ __global__ void renderImage(triangle* prims, deviceData* devDat, rgb* image)
                 }
             }
         }
+    LOG(INFO) << "Alle Pixel berechnet.";
 	#endif
     }
 

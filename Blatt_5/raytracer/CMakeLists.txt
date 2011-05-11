@@ -20,7 +20,7 @@ include_directories(${YAMLCPP_INCLUDE_DIR})
 include_directories("src")
 include_directories(${CUDA_INCLUDE_DIRS})
 
-
+set(CUDA_NVCC_FLAGS "-arch=sm_20" )
 add_executable(rt src/main.cc src/parser.cc src/raytracer.cc src/ppm_writer.cc src/types.cc)
 set_target_properties(rt PROPERTIES COMPILE_FLAGS "-D__CPU__")
 target_link_libraries(rt ${GLOG_LIBRARY})
