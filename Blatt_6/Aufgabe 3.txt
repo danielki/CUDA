@@ -1,0 +1,38 @@
+Assignment 3:
+Report the number of global memory accesses for your kernel.
+
+global load hit: 285006
+global load miss: 64
+global store: 8238
+
+SUM=293 308
+
+What's the occupancy of your kernel? 
+0.333
+
+How many registers does it use?
+63
+
+Report those numbers for rtcuda -height 400 -width 400 src/double-torus.yaml double-torus.ppm
+done.
+
+when performed on mpc711. Which part of your code could cause
+uncoalesced accesses on devices with compute capability 1.0/1.1?
+
+Alle Threads haben den gleichen Schleifenrumpf und greifen somit gleichzeitig auf die gleichen Speicherzellen zu. 
+-> Broadcast zugriff erst in späteren Versionen.
+
+RGB ist (noch) eine selbstdefinierte Struktur und somit nicht optimiert für die empfohlene Größe der Segmente.
+
+[...]
+
+for (int o=0; o < devDat->primSize; o++ )
+            {
+            if ( intersect(r,prims[o],p) )
+                {
+                if (norm(p - r.start) < entfernung) // näher dran als vorhergehendes objekt ?
+                    {
+                    [...]
+                    }
+
+[...]
