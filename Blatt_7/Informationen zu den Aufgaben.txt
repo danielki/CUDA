@@ -6,19 +6,19 @@ Bei einer Auflösung von 50x50 ergeben sich für die Versionen folgende Laufzeiten
 
 GPU_alt: Zeit für das Rendering - Sekunde(n): 0, Millisekunde(n): 357.
 GPU_A1(intersec_alg): Zeit für das Rendering - Sekunde(n): 0, Millisekunde(n): 320.
-GPU_A2(shared): Zeit für das Rendering - Sekunde(n): 0, Millisekunde(n): 348.
+GPU_A2(shared & intersec_alg): Zeit für das Rendering - Sekunde(n): 0, Millisekunde(n): 348.
 
 Bei einer Auflösung von 100x100 ergeben sich für die Versionen folgende Laufzeiten:
 
 GPU_alt: Zeit für das Rendering - Sekunde(n): 0, Millisekunde(n): 413.
 GPU_A1(intersec_alg): Zeit für das Rendering - Sekunde(n): 0, Millisekunde(n): 362.
-GPU_A2(shared): Zeit für das Rendering - Sekunde(n): 0, Millisekunde(n): 429.
+GPU_A2(shared & intersec_alg): Zeit für das Rendering - Sekunde(n): 0, Millisekunde(n): 429.
 
 Bei einer Auflösung von 400x400 ergeben sich für die Versionen folgende Laufzeiten:
 
 GPU_alt: Zeit für das Rendering - Sekunde(n): 2, Millisekunde(n): 65.
 GPU_A1(intersec_alg): Zeit für das Rendering - Sekunde(n): 1, Millisekunde(n): 466.
-GPU_A2(shared): Zeit für das Rendering - Sekunde(n): 1, Millisekunde(n): 721.
+GPU_A2(shared & intersec_alg): Zeit für das Rendering - Sekunde(n): 1, Millisekunde(n): 721.
 
 Wenn man sich die Ergebnisse anschaut sieht man, dass der shared Speicher keine Verbesserung bringt - eher im Gegenteil.
 Das liegt aber vermutlich an dem Cache der bei der compute capability 2.x eingeführt wurde und hier gute Ergebnisse liefert. In Versionen 1.x würde die shared Version vermutlich wesentlich bessere Ergebnisse erzielen.
