@@ -1,0 +1,29 @@
+Zu Aufgabe 1) & 2):
+
+Timings für die verschiedenen Versionen:
+
+Bei einer Auflösung von 50x50 ergeben sich für die Versionen folgende Laufzeiten:
+
+GPU_alt: Zeit für das Rendering - Sekunde(n): 0, Millisekunde(n): 357.
+GPU_A1(intersec_alg): Zeit für das Rendering - Sekunde(n): 0, Millisekunde(n): 320.
+GPU_A2(shared): Zeit für das Rendering - Sekunde(n): 0, Millisekunde(n): 348.
+
+Bei einer Auflösung von 100x100 ergeben sich für die Versionen folgende Laufzeiten:
+
+GPU_alt: Zeit für das Rendering - Sekunde(n): 0, Millisekunde(n): 413.
+GPU_A1(intersec_alg): Zeit für das Rendering - Sekunde(n): 0, Millisekunde(n): 362.
+GPU_A2(shared): Zeit für das Rendering - Sekunde(n): 0, Millisekunde(n): 429.
+
+Bei einer Auflösung von 400x400 ergeben sich für die Versionen folgende Laufzeiten:
+
+GPU_alt: Zeit für das Rendering - Sekunde(n): 2, Millisekunde(n): 65.
+GPU_A1(intersec_alg): Zeit für das Rendering - Sekunde(n): 1, Millisekunde(n): 466.
+GPU_A2(shared): Zeit für das Rendering - Sekunde(n): 1, Millisekunde(n): 721.
+
+Wenn man sich die Ergebnisse anschaut sieht man, dass der shared Speicher keine Verbesserung bringt - eher im Gegenteil.
+Das liegt aber vermutlich an dem Cache der bei der compute capability 2.x eingeführt wurde und hier gute Ergebnisse liefert. In Versionen 1.x würde die shared Version vermutlich wesentlich bessere Ergebnisse erzielen.
+
+Zu Aufgabe 3):
+
+Ich habe hier das Image normal und anschließend Doppelt so groß gerendert und dann mit Hilfe vom Texture Memory auf die normale größe zurück gerechnet, indem ich den Mittelwert von 4 Pixeln gebildet habe. Damit habe ich erreicht, dass die Kanten geglättet sind, jedoch eine wesentlich höhere Berechnungszeit. Gespeichert habe ich die Image mit dem Antialiasing mit dem gleichen Filename, jedoch ein "anti_" davor gesetzt - es werden somit 2 Datein erzeugt die man entsprechend vergleichen kann.
+
