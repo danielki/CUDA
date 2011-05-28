@@ -1,0 +1,13 @@
+I. Brandsimulator - wie breitet sich Feuer in einem Terran aus in Abhängigkeit von Waldbrandgefahrenstufe, Windrichtung und Beschaffenheit des Terran (Bäume, Sträucher, etc.) ?
+
+Jedes Objekt (zB. Sträucher, Bäume - Nadel, Laubbäume ) hat eine gewisse Wiederstandskraft gegen Feuer. "Die natürlichen Wälder Mitteleuropas sind hauptsächlich Laubmischwälder aus Rotbuche und Stieleiche. Sie halten mehr Feuchtigkeit in Biomasse, Boden und Luft und trocknen weniger schnell aus als Nadelholzforste. Eine natürliche Waldzusammensetzung ist so auch ein guter Schutz vor Waldbränden." ( siehe Wikipedia )
+
+Demnach muss für jedes Objekt die Wahrscheinlichkeit entzündet zu werden getrennt betrachtet werden und die Waldbrandgefahrstufe mit in die Kalkulation einbezogen werden. 
+
+Ist ein Feuer ausgebrochen, dann breitet es sich in alle Richtungen aus, jedoch hängt dies auch vom Wind ab. Benachbarte Objekte die in Brand geraten sind gefährden das betrachtete Objekt in zusammenhand mit Wind, Waldbrandgefahren Stufe und Beschaffenheit des Objektes. Funkenflug könnte auch nicht direkt benachbarte Objekte entflammen. Somit muss nach jeder Zeiteinheit die Berechnung der Feuerausbreitung für alle Objekte durchgeführt werden welche sich in der Nähe eines Feuers befinden und dies kann parallel geschehen. Das Problem hat eine Ähnlichkeit mit vielen anderen, wie z.B. das in der letzten Veranstaltung vorgestellte Wellenprojekt. Der Anfang der Welle ist mit dem Ausbruch eines Feuers zu vergleichen, wobei die Verbreitung, im Gegensatz zur Ausbreitung eines Feuers, eher gleichmäßig geschieht. Bei den Wellen muss man jedoch u.a. Reflektionen berücksichtigen, was durch die verzehrende Wirkung eines Feuers überflüssig wird.
+
+Dieses Projekt kann dafür genutzt werden um den Verlauf eines Brandes vorherzusagen und die gängige Bekämpfung eines Feuers durch Gegenbrände auf Erfolg zu testen bzw. zu üben. Da dieses Thema natürlich sehr wichtig ist für die Realität, musste ich feststellen, dass es schon einige Programme gibt die Vorhersagen und Ausbreitung von Bränden vorher sagen können. Die Software ist allerdings nicht frei verfügbar, somit konnte ich nicht nachprüfen ob meine Idee bereits umgesetzt wurde bzw. falls es geschehen ist wie Performant die Lösungen sind.
+
+II: Wellensimulator - Wie breiten sich Wellen ( Wasserwellen, Funkwellen, ... ) aus, wie werden sie Reflektiert und wie wirkt sich das Terran und die zugeführte Energie auf die Ausbreitung aus ?
+
+III: Paniksimulator - Wie verhalten sich Menschen in einem beengten Terran mit begrenzten Möglichkeiten zur Fortbewegung in die gewünschte Richtung. Wie wirken sich Panik steigernde Einflüsse wie z.B. Feuer auf das Verhalten der Menschen aus ?
