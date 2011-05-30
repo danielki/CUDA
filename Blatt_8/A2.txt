@@ -10,4 +10,7 @@ Dieses Projekt kann dafür genutzt werden um den Verlauf eines Brandes vorherzus
 
 II: Wellensimulator - Wie breiten sich Wellen ( Wasserwellen, Funkwellen, ... ) aus, wie werden sie Reflektiert und wie wirkt sich das Terran und die zugeführte Energie auf die Ausbreitung aus ?
 
+--> Ich werde die zweite Aufgabe, da sie relativ ähnlich ist zu meiner ersten Idee, mit Martin P. zusammen bearbeiten. Wir haben vor die Aufgabe zu erweitern und haben schon Prof. Zumbusch angeschrieben inwiefern diese Ideen Realisierbar sind. Auszug aus der Mail: "Wir haben uns bisher überlegt, dass man (2D-) Hindernisse in die Szene einbauen könnte, um die Reflexionen nicht nur am Rand stattfinden zu lassen. Auch haben wir uns mal angeschaut, wie man mit finiten Differenzen Tsunami Wellen simulieren kann und sind dabei auf die Flachwassergleichungen gestossen, welche sich auch sehr gut in CUDA umsetzen lassen sollte."
+
+
 III: Paniksimulator - Wie verhalten sich Menschen in einem beengten Terran mit begrenzten Möglichkeiten zur Fortbewegung in die gewünschte Richtung. Wie wirken sich Panik steigernde Einflüsse wie z.B. Feuer auf das Verhalten der Menschen aus ?
